@@ -1,0 +1,246 @@
+/* Кухонный оркестратор — «кухонный талон»: плоская бумага, печатная типографика */
+
+:root {
+  --paper: #F4F5F3;
+  --card: #FFFFFF;
+  --ink: #16181D;
+  --ink-soft: #5A5F6A;
+  --accent: #FF4D1F;
+  --link: #3D5AFE;
+  --line: #E2E4E0;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ticket {
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+/* — шапка — */
+.masthead {
+  padding-bottom: 1.1rem;
+  border-bottom: 2px solid var(--ink);
+}
+.masthead h1 {
+  font-size: 1.45rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.tagline {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+/* — подача — */
+.serve {
+  margin-top: 1.4rem;
+}
+.serve-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.serve-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+#serve-time {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  width: 11rem;
+}
+.flag {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.15rem 0.6rem;
+}
+
+/* — блюда — */
+.dishes {
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--line);
+}
+.item-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.item-name {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+.item-minutes {
+  width: 4.6rem;
+  font-family: var(--mono);
+  font-size: 1rem;
+  text-align: right;
+  padding: 0.6rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+}
+.item-minutes::-webkit-outer-spin-button,
+.item-minutes::-webkit-inner-spin-button { -webkit-appearance: none; }
+.item-minutes { -moz-appearance: textfield; appearance: textfield; }
+.item-remove {
+  width: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.item-remove:hover { color: var(--accent); border-color: var(--accent); }
+
+/* — кнопки — */
+.btn {
+  font: inherit;
+  cursor: pointer;
+  min-height: 2.75rem;
+  border-radius: 8px;
+}
+.btn-add {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.6rem;
+  border: 1px dashed var(--ink-soft);
+  background: transparent;
+  color: var(--ink);
+  font-weight: 550;
+}
+.btn-add:hover { border-color: var(--ink); }
+.btn-ghost {
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.6rem;
+}
+.btn-ghost:hover { color: var(--ink); }
+.btn-reset { display: block; margin: 1.2rem auto 0; }
+
+/* — таймлайн — */
+.board {
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px dashed var(--line);
+}
+.hint {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  text-align: center;
+  padding: 1.4rem 0;
+}
+.board-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.countdown {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* лента: моно-время слева, рейка, карточка позиции */
+.timeline {
+  list-style: none;
+  padding: 0.9rem 0 0;
+}
+.timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  gap: 0.7rem;
+  padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+  border-left: 3px solid var(--line);
+  border-radius: 0 8px 8px 0;
+}
+.timeline li + li { margin-top: 0.35rem; }
+.tl-time {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding-top: 0.05rem;
+}
+.tl-name { font-weight: 550; }
+.tl-status {
+  grid-column: 2;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.tl-waiting { background: transparent; }
+.tl-due {
+  background: var(--card);
+  border-left-color: var(--accent);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.tl-due .tl-status { color: var(--accent); font-weight: 700; }
+.tl-due .tl-time { color: var(--accent); }
+.tl-cooking { background: var(--card); border-left-color: var(--ink); }
+.tl-served { opacity: 0.45; }
+.tl-served .tl-name { text-decoration: line-through; }
+
+@keyframes pulse {
+  50% { border-left-color: var(--ink); }
+}
+
+/* — подвал — */
+.colophon {
+  margin-top: 2.2rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+/* — доступность — */
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tl-due { animation: none; }
+}
