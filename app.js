@@ -9,10 +9,17 @@ function loadState() {
   try {
     const raw = JSON.parse(localStorage.getItem(KEY));
     if (raw && Array.isArray(raw.items)) {
-      return { serveTime: "", sound: true, notified: {}, ...raw };
+      const st = { serveTime: "", serveAt: null, sound: true, notified: {}, ...raw };
+      // старый план: подача больше 6 часов в прошлом — считаем завершённым
+      if (st.serveAt && Date.now() - st.serveAt > 6 * 3600_000) {
+        st.serveTime = "";
+        st.serveAt = null;
+        st.notified = {};
+      }
+      return st;
     }
   } catch {}
-  return { serveTime: "", items: [], sound: true, notified: {} };
+  return { serveTime: "", serveAt: null, items: [], sound: true, notified: {} };
 }
 
 function saveState() {
@@ -54,8 +61,10 @@ function renderItems() {
 const timeFmt = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" });
 
 function plan(now = new Date()) {
-  if (!state.serveTime) return null;
-  const serveAt = resolveServeDate(state.serveTime, now);
+  if (!state.serveAt) return null;
+  // дата подачи зафиксирована в момент ввода — иначе после «подано»
+  // resolveServeDate утащил бы план на завтра прямо на тике
+  const serveAt = new Date(state.serveAt);
   // acked: позиции, чей due показан больше DUE_WINDOW_MS назад (state.notified: {id: timestampMs})
   const acked = new Set(
     Object.entries(state.notified)
@@ -78,8 +87,8 @@ function renderTimeline() {
   $("#hint").hidden = !!p;
   $("#timeline").hidden = !p;
   $("#countdown").hidden = !p;
-  $("#tomorrow-flag").hidden = !state.serveTime ||
-    resolveServeDate(state.serveTime, now).getDate() === now.getDate();
+  $("#tomorrow-flag").hidden = !state.serveAt ||
+    new Date(state.serveAt).getDate() === now.getDate();
   syncWakeLock(!!p);
   if (!p) { saveState(); return; }
 
@@ -172,6 +181,10 @@ function tick() {
 
 $("#serve-time").addEventListener("input", (e) => {
   state.serveTime = e.target.value;
+  state.serveAt = e.target.value
+    ? resolveServeDate(e.target.value, new Date()).getTime()
+    : null;
+  state.notified = {}; // новое время — новые бипы
   saveState();
   renderTimeline();
 });
@@ -182,7 +195,7 @@ $("#sound-toggle").addEventListener("click", () => {
   renderSoundToggle();
 });
 $("#reset").addEventListener("click", () => {
-  state = { serveTime: "", items: [], sound: state.sound, notified: {} };
+  state = { serveTime: "", serveAt: null, items: [], sound: state.sound, notified: {} };
   saveState();
   $("#serve-time").value = "";
   renderItems();
