@@ -153,6 +153,8 @@ body {
   font-family: var(--mono);
   font-size: 0.78rem;
   padding: 0.4rem 0.6rem;
+  white-space: nowrap;
+  flex: none;
 }
 .btn-ghost:hover { color: var(--ink); }
 .btn-reset { display: block; margin: 1.2rem auto 0; }
